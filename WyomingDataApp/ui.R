@@ -1,5 +1,4 @@
 # ui.R
-reportingunits=seq(1,7,1) 
 
 shinyUI(fluidPage(theme="bootstrapdarkly.css",
   titlePanel("Wyoming Water Use Data Exploration"),
@@ -7,20 +6,16 @@ shinyUI(fluidPage(theme="bootstrapdarkly.css",
   sidebarLayout(
     sidebarPanel(
       helpText("Explore water use by sector."),
-      
       selectInput(inputId = "reportingunit",
                   label = "Select a reporting unit (location):",
-                  choices = reportingunits,
-                  selected = "1")
+                  choices = c("Fetching Reporting Units"),
+                  selected = "Fetching Reporting Units")
     ),
     
     mainPanel(
       plotOutput(outputId="CUplot"),height="400px",
+      tableOutput("table"),
       textOutput(outputId="CUmethod")
-      ),
-    
-    fluidRow(
-      tableOutput("table")
     )
   )
 ))
