@@ -4,18 +4,47 @@ library(XML)
 library(RColorBrewer)
 shinyServer(
   function(input, output) {
+    #REPORTING UNIT INFO##############################################################################################################################
+    outVar = reactive({
+      statedata = xmlRoot(xmlParse('https://water.utah.gov/DWRE/WADE/v0.2/GetCatalog/GetCatalog_GetAll.php?orgid=utwre'))
+      n.reports=length(xmlToList(statedata))
+      RU_df=data.frame(RowIndex=seq(1,n.reports),row.names=NULL,stringsAsFactors = FALSE)
+      for(i in seq(1,n.reports)){
+        reporttype=xmlSApply(statedata[[i]][["DataType"]],xmlValue)
+        reportingunit_use=xmlSApply(statedata[[i]][["ReportUnitIdentifier"]],xmlValue)
+        reportingunitname_use=xmlSApply(statedata[[i]][["ReportUnitName"]],xmlValue)
+        RU_df[i,"ReportingUnit"]=as.numeric(reportingunit_use[1])
+        RU_df[i,"ReportingUnitName"]=as.character(reportingunitname_use[1])
+      }
+      
+      return(RU_df)
+    })
+    observe({
+      RU_df=outVar()
+      RUNames=RU_df[!is.na(RU_df$ReportingUnitName),"ReportingUnitName"]
+      
+      updateSelectInput(session, "reportingunit",
+                        choices = RUNames)
+    })
+    
+    
+    
+    
     #CONSUMPTIVE USE###################################################################################################################################    
     #Create reactive function that will fetch consumptive use data when the user changes the inputs (year or location)
     CU_data <- reactive({
+      RU_df=outVar()
+      RU_dfSub=RU_df[!is.na(RU_df$ReportingUnitName),]
+      RUNumber=RU_dfSub[(RU_dfSub$ReportingUnitName==input$reportingunit),"ReportingUnit"]
       #Fetch and parse data
-      xml.urlCU=paste0('http://water.utah.gov/DWRE/WADE/v0.2/GetSummary/GetSummary.php?loctype=REPORTUNIT&loctxt=',input$reportingunit,'&orgid=utwre&reportid=',input$year,'_ConsumptiveUse&datatype=ALL')
+      xml.urlCU=paste0('http://water.utah.gov/DWRE/WADE/v0.2/GetSummary/GetSummary.php?loctype=REPORTUNIT&loctxt=',RUNumber,'&orgid=utwre&reportid=',input$year,'_ConsumptiveUse&datatype=ALL')
 
         CUroot= xmlRoot(xmlParse(xml.urlCU,useInternalNodes = TRUE))
         #Extract Report Summary
         CUreportsummary=CUroot[["Organization"]][["Report"]][["ReportingUnit"]][["WaterUseSummary"]]
         #Water use Categories (e.g. Agricultural, Municipal/Industrial)
         CUwaterusetype=xmlSApply(CUreportsummary,function(x) xmlSApply(x[[2]],xmlValue))
-        CU_df=data.frame(waterusetype=as.factor(CUwaterusetype),row.names=NULL,stringsAsFactors = FALSE)
+        CU_df=data.frame(Sector=as.factor(CUwaterusetype),row.names=NULL,stringsAsFactors = FALSE)
         n.uses=length(xmlToList(CUreportsummary))
         #Get values for the use amount
         for (i in seq(1,n.uses)){
@@ -26,7 +55,7 @@ shinyServer(
           }else{
           CUamount=xmlSApply(CUreportsummary[[i]][[3]][["WaterUseAmount"]],xmlValue)
           }
-        CU_df[i,"AmountNumber"]=as.numeric(CUamount[1])
+        CU_df[i,"Amount"]=as.numeric(CUamount[1])
         }
       return(CU_df)
     })
@@ -45,12 +74,18 @@ shinyServer(
       CU_df=CU_data()
       title="Comparison of Water Use by Sector"
       ggplot(data=CU_df,environment = environment())+
-        geom_bar(aes(x=waterusetype,y=AmountNumber, fill=waterusetype),stat="identity")+
+        geom_bar(aes(x=Sector,y=Amount, fill=Sector),stat="identity")+
         theme_bw()+scale_fill_brewer(palette="Paired")+
         xlab("Sector")+ylab("Water Use (acre-feet/year)")+ggtitle(title)+
-        geom_text(aes(label = AmountNumber, x=waterusetype, y=AmountNumber),size = 5, position = position_stack(vjust = 0.5))+
         theme(legend.position="none",plot.title = element_text(hjust = 0.5))
     })
+    
+    #List amounts in table
+    output$CUtable <- renderTable({
+      CU_df=CU_data()
+    },bordered=TRUE, striped=TRUE)
+    
+    
     #Prints the method information
     output$CUMethod <- renderText(
         paste0("For more information about the methods used, see: ",CUmethod_df$MethodLinkText[[1]])
@@ -59,14 +94,17 @@ shinyServer(
     #DIVERSION##########################################################################################################################################    
     #Create reactive function that will fetch diversion data when the user changes the inputs (year or location)
     Div_data <- reactive({
+      RU_df=outVar()
+      RU_dfSub=RU_df[!is.na(RU_df$ReportingUnitName),]
+      RUNumber=RU_dfSub[(RU_dfSub$ReportingUnitName==input$reportingunit),"ReportingUnit"]
       #Fetch and parse data
-      xml.urlDiv=paste0('http://water.utah.gov/DWRE/WADE/v0.2/GetSummary/GetSummary.php?loctype=REPORTUNIT&loctxt=',input$reportingunit,'&orgid=utwre&reportid=',input$year,'_Diversion&datatype=ALL')
+      xml.urlDiv=paste0('http://water.utah.gov/DWRE/WADE/v0.2/GetSummary/GetSummary.php?loctype=REPORTUNIT&loctxt=',RUNumber,'&orgid=utwre&reportid=',input$year,'_Diversion&datatype=ALL')
         Divroot= xmlRoot(xmlParse(xml.urlDiv))
         #Extract Report Summary
         Divreportsummary=Divroot[["Organization"]][["Report"]][["ReportingUnit"]][["WaterUseSummary"]]
         #Water use Categories (e.g. Agricultural, Municipal/Industrial)
         Divwaterusetype=xmlSApply(Divreportsummary,function(x) xmlSApply(x[[2]],xmlValue))
-        Div_df=data.frame(waterusetype=as.factor(Divwaterusetype),row.names=NULL,stringsAsFactors = FALSE)
+        Div_df=data.frame(Sector=as.factor(Divwaterusetype),row.names=NULL,stringsAsFactors = FALSE)
         n.uses=length(xmlToList(Divreportsummary))
         #Get values for the use amount
         for (i in seq(1,n.uses)){
@@ -78,7 +116,7 @@ shinyServer(
           }else{
             Divamount=xmlSApply(Divreportsummary[[i]][[3]][["WaterUseAmount"]],xmlValue)
           }
-          Div_df[i,"AmountNumber"]=as.numeric(Divamount[1])
+          Div_df[i,"Amount"]=as.numeric(Divamount[1])
         }
       return(Div_df)
     })
@@ -96,12 +134,17 @@ shinyServer(
       Div_df=Div_data()
       title="Comparison of Diversions by Sector"
       ggplot(data=Div_df,environment = environment())+
-        geom_bar(aes(x=waterusetype,y=AmountNumber, fill=SourceType),stat="identity")+
+        geom_bar(aes(x=Sector,y=Amount, fill=SourceType),stat="identity")+
         theme_bw()+scale_fill_brewer(palette="Paired", name="Source")+
         xlab("Sector")+ylab("Diversions (acre-feet/year)")+ggtitle(title)+
-        geom_text(aes(label = AmountNumber, x=waterusetype, y=AmountNumber),size = 5, position = position_stack(vjust = 0.5))+
         theme(legend.position="bottom",plot.title = element_text(hjust = 0.5))
     })
+    
+    #List amounts in table
+    output$Divtable <-renderTable({
+      Div_df=Div_data()
+    },bordered=TRUE,striped=TRUE)
+    
     
     #Prints the method information
     output$DivMethod <- renderText(

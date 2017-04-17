@@ -28,15 +28,17 @@ shinyUI(fluidPage(theme="bootstrapdarkly.css",
                   min=2005,max=2014,round=TRUE,ticks=FALSE,value=2010,sep=""),
       selectInput(inputId = "reportingunit",
                   label = "Select a reporting unit (location):",
-                  choices = reportingunits,
-                  selected = "03-01-01")
+                  choices = c("Fetching Reporting Units"),
+                  selected = "Fetching Reporting Units")
     ),
     
     mainPanel(
       plotOutput(outputId="CUplot"),height="400px",
-      textOutput(outputId="CUMethod"),
+      tableOutput("CUtable"),
+      textOutput(outputId="CUethod"),
       plotOutput(outputId="Divplot"),height="400px",
-      textOutput(outputId="DivMethod")
+      tableOutput("Divtable"),
+      textOutput(outputId="Divmethod")
       )
   )
 ))

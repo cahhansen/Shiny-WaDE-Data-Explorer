@@ -3,8 +3,9 @@ title: WyomingDataApp
 account: cahhansen
 server: shinyapps.io
 appId: 172797
-bundleId: 792247
+bundleId: 792435
 url: https://cahhansen.shinyapps.io/WyomingDataApp/
-when: 1492457738.0982
+when: 1492464924.36951
 asMultiple: FALSE
 asStatic: FALSE
+ignoredFiles: oldserver.R
