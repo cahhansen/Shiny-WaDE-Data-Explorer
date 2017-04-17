@@ -87,7 +87,7 @@ shinyServer(
     
     
     #Prints the method information
-    output$CUMethod <- renderText(
+    output$CUmethod <- renderText(
         paste0("For more information about the methods used, see: ",CUmethod_df$MethodLinkText[[1]])
       )
     
@@ -147,7 +147,7 @@ shinyServer(
     
     
     #Prints the method information
-    output$DivMethod <- renderText(
+    output$Divmethod <- renderText(
       paste0("For more information about the methods used, see: ",Divmethod_df$MethodLinkText[[1]])
       )
   }
