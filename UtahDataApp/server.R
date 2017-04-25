@@ -2,21 +2,23 @@
 library(ggplot2)
 library(XML)
 library(RColorBrewer)
+library(RCurl)
 shinyServer(
-  function(input, output) {
+  function(input, output,session) {
     #REPORTING UNIT INFO##############################################################################################################################
     outVar = reactive({
-      statedata = xmlRoot(xmlParse('https://water.utah.gov/DWRE/WADE/v0.2/GetCatalog/GetCatalog_GetAll.php?orgid=utwre'))
+      statedata = xmlRoot(xmlParse(getURLContent('https://water.utah.gov/DWRE/WADE/v0.2/GetCatalog/GetCatalog_GetAll.php?orgid=utwre'),useInternalNodes = TRUE))
+      reportlist=xmlToList(statedata)
       n.reports=length(xmlToList(statedata))
       RU_df=data.frame(RowIndex=seq(1,n.reports),row.names=NULL,stringsAsFactors = FALSE)
       for(i in seq(1,n.reports)){
         reporttype=xmlSApply(statedata[[i]][["DataType"]],xmlValue)
         reportingunit_use=xmlSApply(statedata[[i]][["ReportUnitIdentifier"]],xmlValue)
         reportingunitname_use=xmlSApply(statedata[[i]][["ReportUnitName"]],xmlValue)
-        RU_df[i,"ReportingUnit"]=as.numeric(reportingunit_use[1])
+        RU_df[i,"ReportingUnit"]=as.character(reportingunit_use[1])
         RU_df[i,"ReportingUnitName"]=as.character(reportingunitname_use[1])
       }
-      
+      RU_df=RU_df[!duplicated(RU_df[,c('ReportingUnit','ReportingUnitName')]),]
       return(RU_df)
     })
     observe({
@@ -37,8 +39,7 @@ shinyServer(
       RU_dfSub=RU_df[!is.na(RU_df$ReportingUnitName),]
       RUNumber=RU_dfSub[(RU_dfSub$ReportingUnitName==input$reportingunit),"ReportingUnit"]
       #Fetch and parse data
-      xml.urlCU=paste0('http://water.utah.gov/DWRE/WADE/v0.2/GetSummary/GetSummary.php?loctype=REPORTUNIT&loctxt=',RUNumber,'&orgid=utwre&reportid=',input$year,'_ConsumptiveUse&datatype=ALL')
-
+      xml.urlCU=getURLContent(paste0('https://water.utah.gov/DWRE/WADE/v0.2/GetSummary/GetSummary.php?loctype=REPORTUNIT&loctxt=',RUNumber,'&orgid=utwre&reportid=',input$year,'_ConsumptiveUse&datatype=ALL'))
         CUroot= xmlRoot(xmlParse(xml.urlCU,useInternalNodes = TRUE))
         #Extract Report Summary
         CUreportsummary=CUroot[["Organization"]][["Report"]][["ReportingUnit"]][["WaterUseSummary"]]
@@ -61,7 +62,7 @@ shinyServer(
     })
     
     #Returns information about the method
-    xml.urlCUMethod=paste0('http://water.utah.gov/DWRE/WADE/v0.2/GetMethod/GetMethod.php?methodid=utwre&methodname=CONSUMPTIVE_USE')
+    xml.urlCUMethod=getURLContent(paste0('https://water.utah.gov/DWRE/WADE/v0.2/GetMethod/GetMethod.php?methodid=utwre&methodname=CONSUMPTIVE_USE'))
     CUmethodroot= xmlRoot(xmlParse(xml.urlCUMethod))
     #Extract Report Summary
     CUmethodsummary=CUmethodroot[["Organization"]][["Method"]]
@@ -98,7 +99,7 @@ shinyServer(
       RU_dfSub=RU_df[!is.na(RU_df$ReportingUnitName),]
       RUNumber=RU_dfSub[(RU_dfSub$ReportingUnitName==input$reportingunit),"ReportingUnit"]
       #Fetch and parse data
-      xml.urlDiv=paste0('http://water.utah.gov/DWRE/WADE/v0.2/GetSummary/GetSummary.php?loctype=REPORTUNIT&loctxt=',RUNumber,'&orgid=utwre&reportid=',input$year,'_Diversion&datatype=ALL')
+      xml.urlDiv=getURLContent(paste0('https://water.utah.gov/DWRE/WADE/v0.2/GetSummary/GetSummary.php?loctype=REPORTUNIT&loctxt=',RUNumber,'&orgid=utwre&reportid=',input$year,'_Diversion&datatype=ALL'))
         Divroot= xmlRoot(xmlParse(xml.urlDiv))
         #Extract Report Summary
         Divreportsummary=Divroot[["Organization"]][["Report"]][["ReportingUnit"]][["WaterUseSummary"]]
@@ -122,7 +123,7 @@ shinyServer(
     })
     
     #Returns information about the method
-    xml.urlDivMethod=paste0('http://water.utah.gov/DWRE/WADE/v0.2/GetMethod/GetMethod.php?methodid=utwre&methodname=DIVERSION')
+    xml.urlDivMethod=getURLContent(paste0('https://water.utah.gov/DWRE/WADE/v0.2/GetMethod/GetMethod.php?methodid=utwre&methodname=DIVERSION'))
     Divmethodroot= xmlRoot(xmlParse(xml.urlDivMethod))
     #Extract Report Summary
     Divmethodsummary=Divmethodroot[["Organization"]][["Method"]]
