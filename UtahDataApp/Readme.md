@@ -1,0 +1,1 @@
+Note that the UtahDataApp functions locally (it may be run on a local instance of RStudio). When the app is hosted on Shinyapps.io, it is unable to handle the authentication between Shinyapps.io and Utah's secure server.
