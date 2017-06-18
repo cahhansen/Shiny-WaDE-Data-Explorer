@@ -8,7 +8,7 @@ shinyServer(
   function(input, output,session) {
     #REPORTING UNIT INFO##############################################################################################################################
     outVar = reactive({
-      statedata = xmlRoot(xmlParse('http://wade.sdsc.edu/WADE/v0.2/GetCatalog/GetCatalog_GetAll.php?orgid=utwre'))
+      statedata = xmlRoot(xmlParse('http://wade.sdsc.edu/WADE/v0.2/GetCatalog/GetCatalog_GetAll.php'))
       reportlist=xmlToList(statedata)
       n.reports=length(xmlToList(statedata))
       RU_df=data.frame(RowIndex=seq(1,n.reports),row.names=NULL,stringsAsFactors = FALSE)
