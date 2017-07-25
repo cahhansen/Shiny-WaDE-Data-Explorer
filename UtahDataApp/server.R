@@ -6,38 +6,11 @@ library(RCurl)
 shinyServer(
   function(input, output,session) {
     #REPORTING UNIT INFO##############################################################################################################################
-    outVar = reactive({
-      statedata = xmlRoot(xmlParse(getURLContent('https://water.utah.gov/DWRE/WADE/v0.2/GetCatalog/GetCatalog_GetAll.php?orgid=utwre'),useInternalNodes = TRUE))
-      reportlist=xmlToList(statedata)
-      n.reports=length(xmlToList(statedata))
-      RU_df=data.frame(RowIndex=seq(1,n.reports),row.names=NULL,stringsAsFactors = FALSE)
-      for(i in seq(1,n.reports)){
-        reporttype=xmlSApply(statedata[[i]][["DataType"]],xmlValue)
-        reportingunit_use=xmlSApply(statedata[[i]][["ReportUnitIdentifier"]],xmlValue)
-        reportingunitname_use=xmlSApply(statedata[[i]][["ReportUnitName"]],xmlValue)
-        RU_df[i,"ReportingUnit"]=as.character(reportingunit_use[1])
-        RU_df[i,"ReportingUnitName"]=as.character(reportingunitname_use[1])
-      }
-      RU_df=RU_df[!duplicated(RU_df[,c('ReportingUnit','ReportingUnitName')]),]
-      return(RU_df)
-    })
-    observe({
-      RU_df=outVar()
-      RUNames=RU_df[!is.na(RU_df$ReportingUnitName),"ReportingUnitName"]
-      
-      updateSelectInput(session, "reportingunit",
-                        choices = RUNames)
-    })
-    
-    
-    
-    
+    load("data/ReportingUnits.Rdata")
     #CONSUMPTIVE USE###################################################################################################################################    
     #Create reactive function that will fetch consumptive use data when the user changes the inputs (year or location)
     CU_data <- reactive({
-      RU_df=outVar()
-      RU_dfSub=RU_df[!is.na(RU_df$ReportingUnitName),]
-      RUNumber=RU_dfSub[(RU_dfSub$ReportingUnitName==input$reportingunit),"ReportingUnit"]
+      RUNumber=RU_df[(RU_df$Name_ID==input$reportingunit),"ReportingUnit"]
       #Fetch and parse data
       xml.urlCU=getURLContent(paste0('https://water.utah.gov/DWRE/WADE/v0.2/GetSummary/GetSummary.php?loctype=REPORTUNIT&loctxt=',RUNumber,'&orgid=utwre&reportid=',input$year,'_ConsumptiveUse&datatype=ALL'))
         CUroot= xmlRoot(xmlParse(xml.urlCU,useInternalNodes = TRUE))
@@ -95,9 +68,7 @@ shinyServer(
     #DIVERSION##########################################################################################################################################    
     #Create reactive function that will fetch diversion data when the user changes the inputs (year or location)
     Div_data <- reactive({
-      RU_df=outVar()
-      RU_dfSub=RU_df[!is.na(RU_df$ReportingUnitName),]
-      RUNumber=RU_dfSub[(RU_dfSub$ReportingUnitName==input$reportingunit),"ReportingUnit"]
+      RUNumber=RU_df[(RU_df$Name_ID==input$reportingunit),"ReportingUnit"]
       #Fetch and parse data
       xml.urlDiv=getURLContent(paste0('https://water.utah.gov/DWRE/WADE/v0.2/GetSummary/GetSummary.php?loctype=REPORTUNIT&loctxt=',RUNumber,'&orgid=utwre&reportid=',input$year,'_Diversion&datatype=ALL'))
         Divroot= xmlRoot(xmlParse(xml.urlDiv))

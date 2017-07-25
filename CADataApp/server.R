@@ -2,7 +2,7 @@
 library(ggplot2)
 library(XML)
 library(RColorBrewer)
-library(plotrix)
+
 
 shinyServer(
   function(input, output,session) {
