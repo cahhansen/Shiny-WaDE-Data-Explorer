@@ -1,8 +1,7 @@
 # server.R
-library(ggplot2)
-library(XML)
-library(RColorBrewer)
-library(RCurl)
+
+
+
 shinyServer(
   function(input, output,session) {
     #REPORTING UNIT INFO##############################################################################################################################
@@ -43,15 +42,16 @@ shinyServer(
     CUmethod_df=data.frame(t(CUmethodinfo),row.names=NULL,stringsAsFactors = FALSE)
     
     #Plots the results from the GetSummary call
-    output$CUplot <- renderPlot({
+    output$CUplot <- renderPlotly({
       #Get data from reactive function (based on inputs of year and reporting unit)
       CU_df=CU_data()
       title="Comparison of Water Use by Sector"
-      ggplot(data=CU_df,environment = environment())+
+      CU_plot = ggplot(data=CU_df,environment = environment())+
         geom_bar(aes(x=Sector,y=Amount, fill=Sector),stat="identity")+
         theme_bw()+scale_fill_brewer(palette="Paired")+
         xlab("Sector")+ylab("Water Use (acre-feet/year)")+ggtitle(title)+
         theme(legend.position="none",plot.title = element_text(hjust = 0.5))
+      ggplotly(CU_plot)
     })
     
     #List amounts in table
@@ -102,14 +102,15 @@ shinyServer(
     Divmethod_df=data.frame(t(Divmethodinfo),row.names=NULL,stringsAsFactors = FALSE)
     
     #Plots results from the GetSummary call
-    output$Divplot <- renderPlot({
+    output$Divplot <- renderPlotly({
       Div_df=Div_data()
       title="Comparison of Diversions by Sector"
-      ggplot(data=Div_df,environment = environment())+
+      Div_plot = ggplot(data=Div_df,environment = environment())+
         geom_bar(aes(x=Sector,y=Amount, fill=SourceType),stat="identity")+
         theme_bw()+scale_fill_brewer(palette="Paired", name="Source")+
         xlab("Sector")+ylab("Diversions (acre-feet/year)")+ggtitle(title)+
         theme(legend.position="bottom",plot.title = element_text(hjust = 0.5))
+      ggplotly(Div_plot)
     })
     
     #List amounts in table

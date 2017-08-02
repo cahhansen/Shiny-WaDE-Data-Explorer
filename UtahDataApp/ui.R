@@ -16,16 +16,16 @@ shinyUI(fluidPage(theme="bootstrapdarkly.css",
                   label = "Select a year to display:",
                   min=2005,max=2014,round=TRUE,ticks=FALSE,value=2010,sep=""),
       selectInput(inputId = "reportingunit",
-                  label = "Select a reporting unit (location):",
+                  label = "Select a reporting unit:",
                   choices = RU_df$Name_ID,
                   selected = "Fetching Reporting Units")
     ),
     
     mainPanel(
-      plotOutput(outputId="CUplot"),height="400px",
+      plotlyOutput(outputId="CUplot"),height="400px",
       tableOutput("CUtable"),
       textOutput(outputId="CUmethod"),
-      plotOutput(outputId="Divplot"),height="400px",
+      plotlyOutput(outputId="Divplot"),height="400px",
       tableOutput("Divtable"),
       textOutput(outputId="Divmethod")
       )
