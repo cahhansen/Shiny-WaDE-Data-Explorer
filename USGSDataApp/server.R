@@ -6,34 +6,23 @@ library(RCurl)
 options(RCurlOptions = list(ssl.verifypeer = FALSE))
 shinyServer(
   function(input, output,session) {
-    # input <- list(reportingunit = "12040204-TX West Galveston Bay", year = "1990")
+    # input <- list(reportingunit = "12040204-TX West Galveston Bay", year = "1990") # test input
     #REPORTING UNIT INFO##############################################################################################################################
-    load("data/ReportingUnits.Rdata")
+    load("data/ReportingUnits.Rdata") # loads RU_df
+    
     #CONSUMPTIVE USE###################################################################################################################################    
     #Create reactive function that will fetch consumptive use data when the user changes the inputs (year or location)
     CU_data <- reactive({
-      RUNumber=RU_df[(RU_df$Name_ID==input$reportingunit),"ReportingUnit"]
-      #Fetch and parse data
-      xml.urlCU=getURLContent(paste0('https://wade-development.usgs.chs.ead/WADE/v0.2/GetSummary/GetSummary.php?loctype=REPORTUNIT&loctxt=',RUNumber,'&orgid=NWUSP&reportid=',input$year,'-CONSUMPTIVEUSE&datatype=ALL'))
-        CUroot <- xmlRoot(xmlParse(xml.urlCU,useInternalNodes = TRUE))
-        #Extract Report Summary
-        CUreportsummary <- CUroot[["Organization"]][["Report"]][["ReportingUnit"]][["WaterUseSummary"]]
-        #Water use Categories (e.g. Agricultural, Municipal/Industrial)
-        CUwaterusetype=xmlSApply(CUreportsummary,function(x) xmlSApply(x[[3]],xmlValue))
-        CU_df=data.frame(Sector=as.factor(CUwaterusetype),row.names=NULL,stringsAsFactors = FALSE)
-        n.uses=length(xmlToList(CUreportsummary))
-        #Get values for the use amount
-        for (i in seq(1,n.uses)){
-          CUsummaryinfo=xmlSApply(CUreportsummary[[i]],xmlValue)
-          CUamountsummary=xmlSApply(CUreportsummary[[i]][[4]],xmlValue)
-          if(is.null(CUreportsummary[[i]][[4]][["WaterUseAmount"]])){
-            CUamount=as.character(rep(NA,4))
-          }else{
-          CUamount=xmlSApply(CUreportsummary[[i]][[4]][["WaterUseAmount"]],xmlValue)
-          }
-        CU_df[i,"Amount"]=as.numeric(CUamount[1])
-        }
-      return(CU_df)
+      
+      wade_url <- paste0('https://wade-development.usgs.chs.ead/WADE/v0.2/',
+                         'GetSummary/GetSummary.php?loctype=REPORTUNIT&loctxt=',
+                         RU_df[(RU_df$Name_ID == input$reportingunit), "ReportingUnit"],
+                         '&orgid=NWUSP&reportid=',
+                         input$year,
+                         '-CONSUMPTIVEUSE&datatype=ALL')
+      
+      return(get_wade_data(wade_url = wade_url))
+      
     })
     
     #Returns information about the method
@@ -70,29 +59,15 @@ shinyServer(
     #DIVERSION##########################################################################################################################################    
     #Create reactive function that will fetch diversion data when the user changes the inputs (year or location)
     Div_data <- reactive({
-      RUNumber=RU_df[(RU_df$Name_ID==input$reportingunit),"ReportingUnit"]
-      #Fetch and parse data
-      xml.urlDiv=getURLContent(paste0('https://wade-development.usgs.chs.ead/WADE/v0.2/GetSummary/GetSummary.php?loctype=REPORTUNIT&loctxt=',RUNumber,'&orgid=NWUSP&reportid=',input$year,'-WITHDRAWALS&datatype=ALL'))
-        Divroot= xmlRoot(xmlParse(xml.urlDiv))
-        #Extract Report Summary
-        Divreportsummary=Divroot[["Organization"]][["Report"]][["ReportingUnit"]][["WaterUseSummary"]]
-        #Water use Categories (e.g. Agricultural, Municipal/Industrial)
-        Divwaterusetype=xmlSApply(Divreportsummary,function(x) xmlSApply(x[[3]],xmlValue))
-        Div_df=data.frame(Sector=as.factor(Divwaterusetype),row.names=NULL,stringsAsFactors = FALSE)
-        n.uses=length(xmlToList(Divreportsummary))
-        #Get values for the use amount
-        for (i in seq(1,n.uses)){
-          Divsummaryinfo=xmlSApply(Divreportsummary[[i]],xmlValue)
-          Divamountsummary=xmlSApply(Divreportsummary[[i]][[4]],xmlValue)
-          Div_df[i,"SourceType"]=Divamountsummary[2]
-          if(is.null(Divreportsummary[[i]][[4]][["WaterUseAmount"]])){
-            Divamount=as.character(rep(NA,4))
-          }else{
-            Divamount=xmlSApply(Divreportsummary[[i]][[4]][["WaterUseAmount"]],xmlValue)
-          }
-          Div_df[i,"Amount"]=as.numeric(Divamount[1])
-        }
-      return(Div_df)
+      
+      wade_url <- paste0('https://wade-development.usgs.chs.ead/WADE/v0.2/',
+                        'GetSummary/GetSummary.php?loctype=REPORTUNIT&loctxt=',
+                        RU_df[(RU_df$Name_ID==input$reportingunit),"ReportingUnit"],
+                        '&orgid=NWUSP&reportid=',
+                        input$year,
+                        '-WITHDRAWALS&datatype=ALL')
+
+      return(get_wade_data(wade_url = wade_url))
     })
     
     #Returns information about the method
@@ -126,3 +101,34 @@ shinyServer(
       )
   }
 )
+
+get_wade_data <- function(wade_url) {
+  
+  xml_root <- xmlRoot(xmlParse(getURLContent(wade_url),
+                             useInternalNodes = TRUE))
+  
+  xml_reportsummary <- xml_root[["Organization"]][["Report"]][["ReportingUnit"]][["WaterUseSummary"]]
+  
+  waterusetype <- xmlSApply(xml_reportsummary,
+                         function(x) xmlSApply(x[["WaterUseTypeName"]], xmlValue))
+  
+  out_df <- data.frame(Sector = as.factor(waterusetype),
+                       row.names = NULL,
+                       stringsAsFactors = FALSE)
+  
+  for (i in 1:nrow(out_df)) { # probably a better way to do this?
+    xml_use_summary <- xmlSApply(xml_reportsummary[[i]], xmlValue)
+    
+    amountsummary=xmlSApply(xml_reportsummary[[i]][[4]], xmlValue)
+    out_df[i,"SourceType"]=amountsummary[["SourceTypeName"]]
+    
+    if(is.null(xml_reportsummary[[i]][["WaterUseAmountSummary"]][["WaterUseAmount"]][["AmountNumber"]])) {
+      out_df[i,"Amount"] <- as.numeric(NA)
+    } else {
+      out_df[i,"Amount"] <- as.numeric(xmlSApply(xml_reportsummary[[i]][["WaterUseAmountSummary"]]
+                                                 [["WaterUseAmount"]][["AmountNumber"]], 
+                                                 xmlValue))
+    }
+  }
+  return(out_df)
+}
