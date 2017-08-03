@@ -30,6 +30,9 @@ get_wade_data <- function(wade_url) {
     stop("Does not appear to be a URL and matching file not found.")
   }
   
+  out_df <- data.frame(Sector = "", SourceType = "", Amount = "", stringsAsFactors = F)
+  
+  try({
   xml_root <- xmlRoot(xmlParse(content,
                                useInternalNodes = TRUE))
   
@@ -57,5 +60,6 @@ get_wade_data <- function(wade_url) {
                                                  xmlValue))
     }
   }
+  })
   return(out_df)
 }
