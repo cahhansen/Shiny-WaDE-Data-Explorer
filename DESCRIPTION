@@ -23,7 +23,6 @@ Suggests:
     RColorBrewer
 LazyLoad: true
 LazyData: true
-VignetteBuilder: knitr
 BugReports: https://github.com/cahhansen/Shiny-WaDE-Data-Explorer/issues
 URL: https://github.com/cahhansen/Shiny-WaDE-Data-Explorer
 RoxygenNote: 6.0.1
