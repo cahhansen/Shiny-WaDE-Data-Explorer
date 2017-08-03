@@ -20,3 +20,10 @@ test_that("usgs_data", {
                             "data/test_usgs_get_wade_data.rds")
 
 })
+
+test_that("wyoming_app_url", {
+  url <- paste0("http://www.westernstateswater.org/Wyoming/WADE/v0.2/GetSummary/GetSummary.php?",
+                "loctype=REPORTUNIT&loctxt=1&orgid=WYWDC&reportid=2014&datatype=USE")
+  test_df <- get_wade_data(url)
+  expect_equal(nrow(test_df), 5)
+}) 

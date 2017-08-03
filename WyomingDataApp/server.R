@@ -2,6 +2,7 @@
 library(ggplot2)
 library(XML)
 library(RColorBrewer)
+library(wadeR)
 shinyServer(
   function(input, output, session) {
     outVar = reactive({
