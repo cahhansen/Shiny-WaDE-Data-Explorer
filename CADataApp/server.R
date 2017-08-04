@@ -35,24 +35,9 @@ shinyServer(
       RU_df=outVar()
       #Fetch and parse data
       xml.urlWS=paste0('http://wade.sdsc.edu/WADE/v0.2/GetSummary/GetSummary.php?loctype=REPORTUNIT&loctxt=',input$reportingunit,'&orgid=CA-DWR&reportid=',input$year,'&datatype=SUPPLY')
-        WSroot= xmlRoot(xmlParse(xml.urlWS,useInternalNodes = TRUE))
-        #Extract Report Summary
-        WSreportsummary=WSroot[["Organization"]][["Report"]][["ReportingUnit"]][["DerivedWaterSupplySummary"]]
-        #Water use Categories (e.g. Agricultural, Municipal/Industrial)
-        WSsupplytype=xmlSApply(WSreportsummary,function(x) xmlSApply(x[[2]],xmlValue))
-        WS_df=data.frame(Type=as.factor(WSsupplytype),row.names=NULL,stringsAsFactors = FALSE)
-        n.supplies=length(xmlToList(WSreportsummary))
-        #Get values for the use amount
-        for (i in seq(1,n.supplies)){
-          #WSsummaryinfo=xmlSApply(WSreportsummary[[i]],xmlValue)
-          WSamountsummary=xmlSApply(WSreportsummary[[i]][[3]],xmlValue)
-          if(is.null(WSreportsummary[[i]][[3]][["AmountNumber"]])){
-            WSamount=as.character(rep(NA,4))
-          }else{
-          WSamount=xmlSApply(WSreportsummary[[i]][[3]][["AmountNumber"]],xmlValue)
-          }
-        WS_df[i,"Amount"]=as.numeric(WSamount[1])
-        }
+      
+      WS_df <- get_wade_data(xml.urlWS)
+      
       return(WS_df)
     })
     

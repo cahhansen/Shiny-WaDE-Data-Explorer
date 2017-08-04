@@ -1,0 +1,252 @@
+<?xml version="1.0"?>
+<?xml-stylesheet type="text/xsl" href="../styles/summary.xsl"?>
+<WC:WaDE xmlns:WC="http://www.exchangenetwork.net/schema/WaDE/0.2">
+  <WC:Organization>
+    <WC:OrganizationIdentifier>CA-DWR</WC:OrganizationIdentifier>
+    <WC:OrganizationName>California Department of Water Resources</WC:OrganizationName>
+    <WC:PurviewDescription>CA-DWR</WC:PurviewDescription>
+    <WC:WaDEURLAddress>http://wade.sdsc.edu</WC:WaDEURLAddress>
+    <WC:Contact>
+      <WC:FirstName>John</WC:FirstName>
+      <WC:MiddleInitial>J</WC:MiddleInitial>
+      <WC:LastName>Helly</WC:LastName>
+      <WC:IndividualTitleText>NA</WC:IndividualTitleText>
+      <WC:EmailAddressText>hellyj@ucsd.edu</WC:EmailAddressText>
+      <WC:TelephoneNumberText>555 555 1212</WC:TelephoneNumberText>
+      <WC:PhoneExtensionText>NA</WC:PhoneExtensionText>
+      <WC:FaxNumberText>555-555-1212   </WC:FaxNumberText>
+      <WC:MailingAddress>
+        <WC:MailingAddressText>9500 Gilman Drive</WC:MailingAddressText>
+        <WC:SupplementalAddressText>NA</WC:SupplementalAddressText>
+        <WC:MailingAddressCityName>La Jolla</WC:MailingAddressCityName>
+        <WC:MailingAddressStateUSPSCode>49</WC:MailingAddressStateUSPSCode>
+        <WC:MailingAddressCountryCode>US</WC:MailingAddressCountryCode>
+        <WC:MailingAddressZIPCode>96761</WC:MailingAddressZIPCode>
+      </WC:MailingAddress>
+    </WC:Contact>
+    <WC:Report>
+      <WC:ReportIdentifier>2010</WC:ReportIdentifier>
+      <WC:ReportingDate>2017-05-30</WC:ReportingDate>
+      <WC:ReportingYear>2010</WC:ReportingYear>
+      <WC:ReportName>2010</WC:ReportName>
+      <WC:ReportLink>NA</WC:ReportLink>
+      <WC:YearType>Water</WC:YearType>
+      <WC:ReportingUnit>
+        <WC:ReportingUnitIdentifier>DAU06435</WC:ReportingUnitIdentifier>
+        <WC:ReportingUnitName>DAU06435</WC:ReportingUnitName>
+        <WC:ReportingUnitTypeName>Detailed Analysis Unit and County</WC:ReportingUnitTypeName>
+        <WC:Location>
+          <WC:StateCode>CA</WC:StateCode>
+          <WC:CountyFipsCode>-999 </WC:CountyFipsCode>
+          <WC:HydrologicUnitCode>-999</WC:HydrologicUnitCode>
+        </WC:Location>
+        <WC:DerivedWaterSupplySummary>
+          <WC:DerivedWaterSupplyType>
+            <WC:WFSReference>
+              <WC:WFSFeatureIdentifier>DAU06435</WC:WFSFeatureIdentifier>
+            </WC:WFSReference>
+            <WC:WaterSupplyTypeName>Water Transfers</WC:WaterSupplyTypeName>
+            <WC:SupplyAmountSummary>
+              <WC:AmountNumber>0.000</WC:AmountNumber>
+              <WC:Method>
+                <WC:MethodContext>CA-DWR</WC:MethodContext>
+                <WC:MethodName>CA DWR Hydrologic Analysis (hellyj@ucsd.edu)</WC:MethodName>
+              </WC:Method>
+              <WC:TimeFrame>
+                <WC:TimeFrameStartName>01/01</WC:TimeFrameStartName>
+                <WC:TimeFrameEndName>12/31</WC:TimeFrameEndName>
+              </WC:TimeFrame>
+            </WC:SupplyAmountSummary>
+          </WC:DerivedWaterSupplyType>
+          <WC:DerivedWaterSupplyType>
+            <WC:WFSReference>
+              <WC:WFSFeatureIdentifier>DAU06435</WC:WFSFeatureIdentifier>
+            </WC:WFSReference>
+            <WC:WaterSupplyTypeName>Water from Refineries</WC:WaterSupplyTypeName>
+            <WC:SupplyAmountSummary>
+              <WC:AmountNumber>0.000</WC:AmountNumber>
+              <WC:Method>
+                <WC:MethodContext>CA-DWR</WC:MethodContext>
+                <WC:MethodName>CA DWR Hydrologic Analysis (hellyj@ucsd.edu)</WC:MethodName>
+              </WC:Method>
+              <WC:TimeFrame>
+                <WC:TimeFrameStartName>01/01</WC:TimeFrameStartName>
+                <WC:TimeFrameEndName>12/31</WC:TimeFrameEndName>
+              </WC:TimeFrame>
+            </WC:SupplyAmountSummary>
+          </WC:DerivedWaterSupplyType>
+          <WC:DerivedWaterSupplyType>
+            <WC:WFSReference>
+              <WC:WFSFeatureIdentifier>DAU06435</WC:WFSFeatureIdentifier>
+            </WC:WFSReference>
+            <WC:WaterSupplyTypeName>State Water Project Deliveries</WC:WaterSupplyTypeName>
+            <WC:SupplyAmountSummary>
+              <WC:AmountNumber>0.000</WC:AmountNumber>
+              <WC:Method>
+                <WC:MethodContext>CA-DWR</WC:MethodContext>
+                <WC:MethodName>CA DWR Hydrologic Analysis (hellyj@ucsd.edu)</WC:MethodName>
+              </WC:Method>
+              <WC:TimeFrame>
+                <WC:TimeFrameStartName>01/01</WC:TimeFrameStartName>
+                <WC:TimeFrameEndName>12/31</WC:TimeFrameEndName>
+              </WC:TimeFrame>
+            </WC:SupplyAmountSummary>
+          </WC:DerivedWaterSupplyType>
+          <WC:DerivedWaterSupplyType>
+            <WC:WFSReference>
+              <WC:WFSFeatureIdentifier>DAU06435</WC:WFSFeatureIdentifier>
+            </WC:WFSReference>
+            <WC:WaterSupplyTypeName>Return Flow</WC:WaterSupplyTypeName>
+            <WC:SupplyAmountSummary>
+              <WC:AmountNumber>0.000</WC:AmountNumber>
+              <WC:Method>
+                <WC:MethodContext>CA-DWR</WC:MethodContext>
+                <WC:MethodName>CA DWR Hydrologic Analysis (hellyj@ucsd.edu)</WC:MethodName>
+              </WC:Method>
+              <WC:TimeFrame>
+                <WC:TimeFrameStartName>01/01</WC:TimeFrameStartName>
+                <WC:TimeFrameEndName>12/31</WC:TimeFrameEndName>
+              </WC:TimeFrame>
+            </WC:SupplyAmountSummary>
+          </WC:DerivedWaterSupplyType>
+          <WC:DerivedWaterSupplyType>
+            <WC:WFSReference>
+              <WC:WFSFeatureIdentifier>DAU06435</WC:WFSFeatureIdentifier>
+            </WC:WFSReference>
+            <WC:WaterSupplyTypeName>Other Federal Deliveries</WC:WaterSupplyTypeName>
+            <WC:SupplyAmountSummary>
+              <WC:AmountNumber>0.000</WC:AmountNumber>
+              <WC:Method>
+                <WC:MethodContext>CA-DWR</WC:MethodContext>
+                <WC:MethodName>CA DWR Hydrologic Analysis (hellyj@ucsd.edu)</WC:MethodName>
+              </WC:Method>
+              <WC:TimeFrame>
+                <WC:TimeFrameStartName>01/01</WC:TimeFrameStartName>
+                <WC:TimeFrameEndName>12/31</WC:TimeFrameEndName>
+              </WC:TimeFrame>
+            </WC:SupplyAmountSummary>
+          </WC:DerivedWaterSupplyType>
+          <WC:DerivedWaterSupplyType>
+            <WC:WFSReference>
+              <WC:WFSFeatureIdentifier>DAU06435</WC:WFSFeatureIdentifier>
+            </WC:WFSReference>
+            <WC:WaterSupplyTypeName>Other</WC:WaterSupplyTypeName>
+            <WC:SupplyAmountSummary>
+              <WC:AmountNumber>0.000</WC:AmountNumber>
+              <WC:Method>
+                <WC:MethodContext>CA-DWR</WC:MethodContext>
+                <WC:MethodName>CA DWR Hydrologic Analysis (hellyj@ucsd.edu)</WC:MethodName>
+              </WC:Method>
+              <WC:TimeFrame>
+                <WC:TimeFrameStartName>01/01</WC:TimeFrameStartName>
+                <WC:TimeFrameEndName>12/31</WC:TimeFrameEndName>
+              </WC:TimeFrame>
+            </WC:SupplyAmountSummary>
+          </WC:DerivedWaterSupplyType>
+          <WC:DerivedWaterSupplyType>
+            <WC:WFSReference>
+              <WC:WFSFeatureIdentifier>DAU06435</WC:WFSFeatureIdentifier>
+            </WC:WFSReference>
+            <WC:WaterSupplyTypeName>Local Supplies</WC:WaterSupplyTypeName>
+            <WC:SupplyAmountSummary>
+              <WC:AmountNumber>0.000</WC:AmountNumber>
+              <WC:Method>
+                <WC:MethodContext>CA-DWR</WC:MethodContext>
+                <WC:MethodName>CA DWR Hydrologic Analysis (hellyj@ucsd.edu)</WC:MethodName>
+              </WC:Method>
+              <WC:TimeFrame>
+                <WC:TimeFrameStartName>01/01</WC:TimeFrameStartName>
+                <WC:TimeFrameEndName>12/31</WC:TimeFrameEndName>
+              </WC:TimeFrame>
+            </WC:SupplyAmountSummary>
+          </WC:DerivedWaterSupplyType>
+          <WC:DerivedWaterSupplyType>
+            <WC:WFSReference>
+              <WC:WFSFeatureIdentifier>DAU06435</WC:WFSFeatureIdentifier>
+            </WC:WFSReference>
+            <WC:WaterSupplyTypeName>Local Imported Deliveries</WC:WaterSupplyTypeName>
+            <WC:SupplyAmountSummary>
+              <WC:AmountNumber>0.000</WC:AmountNumber>
+              <WC:Method>
+                <WC:MethodContext>CA-DWR</WC:MethodContext>
+                <WC:MethodName>CA DWR Hydrologic Analysis (hellyj@ucsd.edu)</WC:MethodName>
+              </WC:Method>
+              <WC:TimeFrame>
+                <WC:TimeFrameStartName>01/01</WC:TimeFrameStartName>
+                <WC:TimeFrameEndName>12/31</WC:TimeFrameEndName>
+              </WC:TimeFrame>
+            </WC:SupplyAmountSummary>
+          </WC:DerivedWaterSupplyType>
+          <WC:DerivedWaterSupplyType>
+            <WC:WFSReference>
+              <WC:WFSFeatureIdentifier>DAU06435</WC:WFSFeatureIdentifier>
+            </WC:WFSReference>
+            <WC:WaterSupplyTypeName>Groundwater Extraction</WC:WaterSupplyTypeName>
+            <WC:SupplyAmountSummary>
+              <WC:AmountNumber>7300.000</WC:AmountNumber>
+              <WC:Method>
+                <WC:MethodContext>CA-DWR</WC:MethodContext>
+                <WC:MethodName>CA DWR Hydrologic Analysis (hellyj@ucsd.edu)</WC:MethodName>
+              </WC:Method>
+              <WC:TimeFrame>
+                <WC:TimeFrameStartName>01/01</WC:TimeFrameStartName>
+                <WC:TimeFrameEndName>12/31</WC:TimeFrameEndName>
+              </WC:TimeFrame>
+            </WC:SupplyAmountSummary>
+          </WC:DerivedWaterSupplyType>
+          <WC:DerivedWaterSupplyType>
+            <WC:WFSReference>
+              <WC:WFSFeatureIdentifier>DAU06435</WC:WFSFeatureIdentifier>
+            </WC:WFSReference>
+            <WC:WaterSupplyTypeName>Desalination</WC:WaterSupplyTypeName>
+            <WC:SupplyAmountSummary>
+              <WC:AmountNumber>0.000</WC:AmountNumber>
+              <WC:Method>
+                <WC:MethodContext>CA-DWR</WC:MethodContext>
+                <WC:MethodName>CA DWR Hydrologic Analysis (hellyj@ucsd.edu)</WC:MethodName>
+              </WC:Method>
+              <WC:TimeFrame>
+                <WC:TimeFrameStartName>01/01</WC:TimeFrameStartName>
+                <WC:TimeFrameEndName>12/31</WC:TimeFrameEndName>
+              </WC:TimeFrame>
+            </WC:SupplyAmountSummary>
+          </WC:DerivedWaterSupplyType>
+          <WC:DerivedWaterSupplyType>
+            <WC:WFSReference>
+              <WC:WFSFeatureIdentifier>DAU06435</WC:WFSFeatureIdentifier>
+            </WC:WFSReference>
+            <WC:WaterSupplyTypeName>Colorado River Deliveries</WC:WaterSupplyTypeName>
+            <WC:SupplyAmountSummary>
+              <WC:AmountNumber>0.000</WC:AmountNumber>
+              <WC:Method>
+                <WC:MethodContext>CA-DWR</WC:MethodContext>
+                <WC:MethodName>CA DWR Hydrologic Analysis (hellyj@ucsd.edu)</WC:MethodName>
+              </WC:Method>
+              <WC:TimeFrame>
+                <WC:TimeFrameStartName>01/01</WC:TimeFrameStartName>
+                <WC:TimeFrameEndName>12/31</WC:TimeFrameEndName>
+              </WC:TimeFrame>
+            </WC:SupplyAmountSummary>
+          </WC:DerivedWaterSupplyType>
+          <WC:DerivedWaterSupplyType>
+            <WC:WFSReference>
+              <WC:WFSFeatureIdentifier>DAU06435</WC:WFSFeatureIdentifier>
+            </WC:WFSReference>
+            <WC:WaterSupplyTypeName>Central Valley Project (State Project)</WC:WaterSupplyTypeName>
+            <WC:SupplyAmountSummary>
+              <WC:AmountNumber>0.000</WC:AmountNumber>
+              <WC:Method>
+                <WC:MethodContext>CA-DWR</WC:MethodContext>
+                <WC:MethodName>CA DWR Hydrologic Analysis (hellyj@ucsd.edu)</WC:MethodName>
+              </WC:Method>
+              <WC:TimeFrame>
+                <WC:TimeFrameStartName>01/01</WC:TimeFrameStartName>
+                <WC:TimeFrameEndName>12/31</WC:TimeFrameEndName>
+              </WC:TimeFrame>
+            </WC:SupplyAmountSummary>
+          </WC:DerivedWaterSupplyType>
+        </WC:DerivedWaterSupplySummary>
+      </WC:ReportingUnit>
+    </WC:Report>
+  </WC:Organization>
+</WC:WaDE>

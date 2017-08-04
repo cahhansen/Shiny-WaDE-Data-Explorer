@@ -38,6 +38,9 @@ get_wade_data <- function(wade_url) {
   
   xml_reportsummary <- xml_root[["Organization"]][["Report"]][["ReportingUnit"]][["WaterUseSummary"]]
   
+  xml_reportsupply <- xml_root[["Organization"]][["Report"]][["ReportingUnit"]][["DerivedWaterSupplySummary"]]
+  
+  if(!is.null(xml_reportsummary)) {
   waterusetype <- xmlSApply(xml_reportsummary,
                             function(x) xmlSApply(x[["WaterUseTypeName"]], xmlValue))
   
@@ -48,9 +51,9 @@ get_wade_data <- function(wade_url) {
   for (i in 1:nrow(out_df)) { # probably a better way to do this?
     xml_use_summary <- xmlSApply(xml_reportsummary[[i]], xmlValue)
     
-    amountsummary=xmlSApply(xml_reportsummary[[i]][["WaterUseAmountSummary"]], xmlValue)
+    amountsummary <- xmlSApply(xml_reportsummary[[i]][["WaterUseAmountSummary"]], xmlValue)
     
-    out_df[i,"SourceType"]=amountsummary[["SourceTypeName"]]
+    out_df[i,"SourceType"] <- amountsummary[["SourceTypeName"]]
     
     if(is.null(xml_reportsummary[[i]][["WaterUseAmountSummary"]][["WaterUseAmount"]][["AmountNumber"]])) {
       out_df[i,"Amount"] <- as.numeric(NA)
@@ -58,6 +61,25 @@ get_wade_data <- function(wade_url) {
       out_df[i,"Amount"] <- as.numeric(xmlSApply(xml_reportsummary[[i]][["WaterUseAmountSummary"]]
                                                  [["WaterUseAmount"]][["AmountNumber"]], 
                                                  xmlValue))
+    }
+  }
+  } else if(!is.null(xml_reportsupply)) {
+    wateruse_supply_type <- xmlSApply(xml_reportsupply,
+                                   function(x) xmlSApply(x[["WaterSupplyTypeName"]], 
+                                                         xmlValue))
+    
+    out_df <- data.frame(Type = wateruse_supply_type, 
+                         row.names = NULL, stringsAsFactors = FALSE)
+
+    #Get values for the use amount
+    for (i in 1:nrow(out_df)) {
+      if(is.null(xml_reportsupply[[i]][[3]][["AmountNumber"]])){
+        amount <- as.character(rep(NA, 4))
+      } else {
+        amount <- xmlSApply(xml_reportsupply[[i]][["SupplyAmountSummary"]][["AmountNumber"]],
+                         xmlValue)
+      }
+      out_df[i,"Amount"] <- as.numeric(amount[1])
     }
   }
   })
