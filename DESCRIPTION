@@ -4,7 +4,7 @@ Title: Shiny WaDE Data Explorer
 Version: 0.0.1
 Authors@R: c( person("David","Blodgett", role = c("aut", "cre"),
     email = "dblodgett@usgs.gov"),
-    person("Carley","Hansen", role = "aut"))
+    person("Carly","Hansen", role = "aut"))
 Description: Functions for working with and shiny apps for viewing WaDE data.
 License: CC0
 Copyright: This software is in the public domain because it contains materials
