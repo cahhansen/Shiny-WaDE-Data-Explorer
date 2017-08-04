@@ -5,37 +5,22 @@ library(RColorBrewer)
 library(wadeR)
 shinyServer(
   function(input, output, session) {
-    outVar = reactive({
-      statedata = xmlRoot(xmlParse('http://www.westernstateswater.org/Wyoming/WADE/v0.2/GetCatalog/GetCatalog_GetAll.php?orgid=WYWDC'))
-      n.reports=length(xmlToList(statedata))
-      RU_df=data.frame(RowIndex=seq(1,n.reports),row.names=NULL,stringsAsFactors = FALSE)
-      for(i in seq(1,n.reports)){
-        reporttype=xmlSApply(statedata[[i]][["DataType"]],xmlValue)
-        if(reporttype=="USE"){
-          reportingunit_use=xmlSApply(statedata[[i]][["ReportUnitIdentifier"]],xmlValue)
-          reportingunitname_use=xmlSApply(statedata[[i]][["ReportUnitName"]],xmlValue)
-        }else{
-          reportingunit_use=NA
-          reportingunitname_use=NA
-        }
-        RU_df[i,"ReportingUnit"]=as.numeric(reportingunit_use[1])
-        RU_df[i,"ReportingUnitName"]=as.character(reportingunitname_use[1])
-      }
-      
-      return(RU_df)
+    outVar <- reactive({
+      #Fetch reporting units for the state (for selection in dropdown menu)
+      ru_url <- 'http://www.westernstateswater.org/Wyoming/WADE/v0.2/GetCatalog/GetCatalog_GetAll.php?orgid=WYWDC'
+      RU_df <- get_reporting_units(ru_url)
     })
+    
     observe({
-      RU_df=outVar()
-      RUNames=RU_df[!is.na(RU_df$ReportingUnitName),"ReportingUnitName"]
-      
+      RU_df <- outVar()
+      RUNames <- RU_df$ReportingUnitName
       updateSelectInput(session, "reportingunit",
                         choices = RUNames)
-      })
+    })
     
     #WATER USE###################################################################################################################################    
-    #Create reactive function that will fetch consumptive use data when the user changes the inputs (year or location)
+    #Fetch consumptive use data when the user changes the inputs (location)
     CU_data <- reactive({
-      
       RU_df <- outVar()
       RU_dfSub <- RU_df[!is.na(RU_df$ReportingUnitName),]
       RUNumber <- RU_dfSub[(RU_dfSub$ReportingUnitName==input$reportingunit),"ReportingUnit"]

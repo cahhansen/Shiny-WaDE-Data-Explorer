@@ -1,13 +1,13 @@
 # ui.R
 
 shinyUI(fluidPage(theme="bootstrapdarkly.css",
-  titlePanel("Wyoming Water Use Data Exploration"),
+  titlePanel("Wyoming Water Use Data Viewer"),
   
   sidebarLayout(
     sidebarPanel(
       helpText("Explore water use by sector."),
       selectInput(inputId = "reportingunit",
-                  label = "Select a reporting unit (location):",
+                  label = "Select a reporting unit:",
                   choices = c("Fetching Reporting Units"),
                   selected = "Fetching Reporting Units")
     ),
