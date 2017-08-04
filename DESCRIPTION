@@ -1,0 +1,28 @@
+Package: wadeR
+Type: Package
+Title: Shiny WaDE Data Explorer
+Version: 0.0.1
+Authors@R: c( person("David","Blodgett", role = c("aut", "cre"),
+    email = "dblodgett@usgs.gov"),
+    person("Carley","Hansen", role = "aut"))
+Description: Functions for working with and shiny apps for viewing WaDE data.
+License: CC0
+Copyright: This software is in the public domain because it contains materials
+    that originally came from the United States Geological Survey, an agency of
+    the United States Department of Interior. For more information, see the
+    official USGS copyright policy at
+    https://www.usgs.gov/visual-id/credit_usgs.html#copyright
+Depends:
+    R (>= 3.0)
+Imports:
+    XML,
+    RCurl
+Suggests:
+    testthat,
+    ggplot2,
+    RColorBrewer
+LazyLoad: true
+LazyData: true
+BugReports: https://github.com/cahhansen/Shiny-WaDE-Data-Explorer/issues
+URL: https://github.com/cahhansen/Shiny-WaDE-Data-Explorer
+RoxygenNote: 6.0.1

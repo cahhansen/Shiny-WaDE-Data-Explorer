@@ -3,6 +3,7 @@ library(ggplot2)
 library(XML)
 library(RColorBrewer)
 library(RCurl)
+library(wadeR)
 options(RCurlOptions = list(ssl.verifypeer = FALSE))
 shinyServer(
   function(input, output,session) {
@@ -101,34 +102,3 @@ shinyServer(
       )
   }
 )
-
-get_wade_data <- function(wade_url) {
-  
-  xml_root <- xmlRoot(xmlParse(getURLContent(wade_url),
-                             useInternalNodes = TRUE))
-  
-  xml_reportsummary <- xml_root[["Organization"]][["Report"]][["ReportingUnit"]][["WaterUseSummary"]]
-  
-  waterusetype <- xmlSApply(xml_reportsummary,
-                         function(x) xmlSApply(x[["WaterUseTypeName"]], xmlValue))
-  
-  out_df <- data.frame(Sector = as.factor(waterusetype),
-                       row.names = NULL,
-                       stringsAsFactors = FALSE)
-  
-  for (i in 1:nrow(out_df)) { # probably a better way to do this?
-    xml_use_summary <- xmlSApply(xml_reportsummary[[i]], xmlValue)
-    
-    amountsummary=xmlSApply(xml_reportsummary[[i]][[4]], xmlValue)
-    out_df[i,"SourceType"]=amountsummary[["SourceTypeName"]]
-    
-    if(is.null(xml_reportsummary[[i]][["WaterUseAmountSummary"]][["WaterUseAmount"]][["AmountNumber"]])) {
-      out_df[i,"Amount"] <- as.numeric(NA)
-    } else {
-      out_df[i,"Amount"] <- as.numeric(xmlSApply(xml_reportsummary[[i]][["WaterUseAmountSummary"]]
-                                                 [["WaterUseAmount"]][["AmountNumber"]], 
-                                                 xmlValue))
-    }
-  }
-  return(out_df)
-}
