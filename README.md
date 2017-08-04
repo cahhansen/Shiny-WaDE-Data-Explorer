@@ -1,5 +1,5 @@
 # Shiny-WaDE-Data-Explorer
-A collection of simple data exploratory tools, built using R and Shiny, and Tableau.
+A collection of simple data exploratory tools, built using R and Shiny.
 
 These tools are being developed to help demonstrate the utility of sharing data via WaDE. 
 Goals include:
