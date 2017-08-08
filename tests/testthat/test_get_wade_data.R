@@ -27,3 +27,12 @@ test_that("wyoming_app_url", {
   test_df <- get_wade_data(url)
   expect_equal(nrow(test_df), 5)
 }) 
+
+test_that("CA Sample Works", {
+  
+  # url <- paste0("http://wade.sdsc.edu/WADE/v0.2/GetSummary/GetSummary.php?",
+  #               "loctype=REPORTUNIT&loctxt=DAU06435&orgid=CA-DWR&reportid=2010&datatype=SUPPLY")
+  url <- "data/CA_sample.xml"  
+  expect_equal_to_reference(get_wade_data(url),"data/test_CA_get_wade_data.rds")
+  
+})
